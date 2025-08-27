@@ -1,4 +1,4 @@
-#1. Introduction
+<h2>1. Introduction</h2>
 
 Problem statement (chronic disease burden, cost, preventable complications)
 
@@ -6,7 +6,7 @@ Objective of the project (early prediction + care management platform)
 
 Target outcomes (reduce complications, prevent ER visits, improve affordability)
 
-2. Literature Review
+<h2>2. Literature Review</h2>
 
 Techniques used historically (rule-based, SVM, Decision Trees, etc.)
 
@@ -14,7 +14,7 @@ Challenges in existing studies (imbalanced data, non-standardized datasets, sign
 
 Existing apps (mySugr, Glooko, Heart CV) + their limitations
 
-3. Proposed System
+<h2>3. Proposed System</h2>
 
 Early Risk Prediction (ML models, multi-label prediction)
 
@@ -26,7 +26,7 @@ Localization and affordability focus
 
 Wearable data simulation for vitals tracking
 
-4. Datasets
+<h2>4. Datasets</h2>
 
 Pima Indians Diabetes
 
@@ -38,7 +38,7 @@ Fitbit-style simulated wearable data
 
 Final dataset: ~6400 rows, 27 features grouped by demographics, vitals, labs, lifestyle, genetic risk, outcomes
 
-5. Methodology
+<h2>5. Methodology</h2>
 
 Data preprocessing (cleaning, encoding, balancing, normalization)
 
@@ -46,7 +46,7 @@ Feature selection (Random Forest feature importance + clinical validation)
 
 Final feature set (27 features grouped by categories)
 
-6. Exploratory Data Analysis (EDA)
+<h2>6. Exploratory Data Analysis (EDA)</h2>
 
 Scatter plots (blood pressure vs hypertension)
 
@@ -56,20 +56,20 @@ Heatmap (feature correlations)
 
 Insights (alignment with medical knowledge)
 
-7. Model Development & Evaluation
-7.1 Models Tried
+<h2>7. Model Development & Evaluation</h2>
+<h3>7.1 Models Tried</h3>
 
-MLP (multi-output classifier)
+1.MLP (multi-output classifier)
 
-Random Forest (multi-output)
+2.Random Forest (multi-output)
 
-LightGBM
+3.LightGBM
 
-XGBoost (multi-label)
+4.XGBoost (multi-label)
 
-CatBoost (multi-model setup)
+5.CatBoost (multi-model setup)
 
-7.2 Results & Comparison
+<h3>7.2 Results & Comparison</h3>
 
 Per-disease precision/recall/F1/AUC
 
@@ -77,11 +77,11 @@ Subset accuracy & Hamming loss
 
 CatBoost emerged as most balanced & interpretable
 
-7.3 Explainability
+<h3>7.3 Explainability</h3>
 
 SHAP values for feature importance (per-disease insights)
 
-8. Care Plan Recommendation Engine
+<h2>8. Care Plan Recommendation Engine</h2>
 
 Knowledge base creation (medical guideline PDF → chunking → embeddings → FAISS index)
 
@@ -91,7 +91,7 @@ Risk-aware personalized care plan generation (diet, lifestyle, medication adhere
 
 Output: API response + formatted PDF report
 
-9. ER Visit Risk Prediction (NHANES Dataset)
+<h2>9. ER Visit Risk Prediction (NHANES Dataset)</h2>
 
 Dataset & preprocessing (imputation, outlier handling, class imbalance)
 
@@ -101,7 +101,7 @@ Evaluation (confusion matrix, classification report)
 
 SHAP explainability (force plot + summary plot interpretation)
 
-10. Dashboard & Visualization
+<h2>10. Dashboard & Visualization</h2>
 
 Doctor’s weekly monitoring dashboard
 
@@ -111,7 +111,7 @@ Trend charts (glucose, BP, HR, cholesterol)
 
 Alerts for abnormal patterns (e.g., rising BP/glucose)
 
-11. Technology Stack
+<h2>11. Technology Stack</h2>
 
 Python (preprocessing, ML pipeline)
 
@@ -125,7 +125,7 @@ HTML/CSS/JS + Flutter (frontend)
 
 Power BI (visualizations)
 
-12. Conclusion & Future Work
+<h2>12. Conclusion & Future Work</h2>
 
 Current achievements (multi-label risk prediction, explainability, personalized care plans, dashboards)
 
@@ -135,10 +135,11 @@ Limitations (dataset size, real-world integration challenges, cost of wearables)
 
 Future directions:
 
+1. Integration with real wearable APIs (Fitbit, Apple Health)
+
+2. Larger and standardized clinical datasets
+
+3. Clinical trials for validation
 
 
-Integration with real wearable APIs (Fitbit, Apple Health)
-
-Larger and standardized clinical datasets
-
-Clinical trials for validation
+Website UI
