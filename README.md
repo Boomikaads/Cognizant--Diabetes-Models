@@ -140,6 +140,3 @@ Future directions:
 2. Larger and standardized clinical datasets
 
 3. Clinical trials for validation
-
-
-Website UI
