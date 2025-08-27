@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard - Chronic Disease Management</title>
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', sans-serif; background-color: #f8faff; color: #002a4d; }
+
+    /* Navbar */
+    header {
+        background: linear-gradient(90deg, #ffffff, #f0f6ff);
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0px 3px 15px rgba(0,0,0,0.08);
+        transition: 0.3s ease;
+    }
+    header.scrolled { background: #ffffff; }
+    header .logo img { height: 45px; transition: transform 0.3s ease; }
+    header .logo img:hover { transform: rotate(-8deg) scale(1.1); }
+    nav ul { list-style: none; display: flex; gap: 25px; }
+    nav ul li a, nav ul li button {
+        color: #002a4d;
+        text-decoration: none;
+        font-weight: bold;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        transition: color 0.3s ease, transform 0.2s ease;
+        position: relative;
+    }
+    nav ul li a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+        width: 0%;
+        height: 2px;
+        background: #0078ff;
+        transition: width 0.3s ease;
+    }
+    nav ul li a:hover::after { width: 100%; }
+    nav ul li a:hover { color: #0078ff; transform: scale(1.05); }
+
+    /* Hero Section */
+    .hero {
+        height: 100vh;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 8%;
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        overflow: hidden;
+        position: relative;
+    }
+    .hero-text {
+        max-width: 600px;
+        z-index: 2;
+        animation: fadeInUp 1.5s ease-in-out;
+    }
+    .hero-text h1 {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        font-weight: bold;
+        color: #002a4d;
+    }
+    .hero-text h1 span { color: #0078ff; }
+    .hero-text p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin-bottom: 25px;
+    }
+    .btn-primary {
+        background-color: #0078ff;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+        display: inline-block;
+        box-shadow: 0 4px 12px rgba(0,120,255,0.3);
+    }
+    .btn-primary:hover {
+        background-color: #005fcc;
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0,120,255,0.4);
+    }
+
+    .hero-image img {
+        width: 450px;
+        max-width: 100%;
+        animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+
+    /* Floating Medical Icons */
+    .icon {
+        position: absolute;
+        font-size: 2rem;
+        opacity: 0.2;
+        animation: move 12s linear infinite;
+    }
+    @keyframes move {
+        0% { transform: translateY(0) rotate(0deg); }
+        100% { transform: translateY(-900px) rotate(360deg); }
+    }
+    .icon1 { left: 15%; top: 80%; animation-delay: 0s; }
+    .icon2 { left: 40%; top: 90%; animation-delay: 2s; }
+    .icon3 { left: 70%; top: 85%; animation-delay: 4s; }
+
+    /* Info Sections */
+    .info-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 60px 10%;
+        background: #f9fbff;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .info-section:hover { background: #eef6ff; transform: scale(1.01); }
+    .info-content { display: flex; align-items: center; gap: 70px; max-width: 1000px; }
+    .info-text { flex: 1; }
+    .info-text h2 { font-size: 2rem; color: #002a4d; margin-bottom: 15px; }
+    .info-text p { font-size: 1.1rem; color: #333; line-height: 1.6; }
+    .info-image img { width: 250px; max-width: 100%; transition: transform 0.3s ease; }
+    .info-image img:hover { transform: scale(1.05); }
+
+    /* Footer */
+    footer {
+        background: linear-gradient(180deg, #002a4d, #001a30);
+        padding: 40px 20px;
+        text-align: center;
+        color: #cfd8dc;
+        position: relative;
+        overflow: hidden;
+    }
+    footer::before, footer::after {
+        content: "";
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: rgba(0,120,255,0.1);
+        border-radius: 50%;
+        animation: pulseGlow 6s infinite alternate;
+    }
+    footer::before { top: -50px; left: -50px; }
+    footer::after { bottom: -50px; right: -50px; background: rgba(0,200,255,0.08); }
+    @keyframes pulseGlow { from { transform: scale(0.9); opacity: 0.6; } to { transform: scale(1.2); opacity: 1; } }
+    .interactive-boxes { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; z-index: 2; }
+    .interactive-boxes .box {
+        background-color: white;
+        color: #004aad;
+        padding: 15px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease, box-shadow 0.3s ease;
+    }
+    .interactive-boxes .box:hover {
+        background-color: #0078ff;
+        color: white;
+        box-shadow: 0 0 15px #00e5ff;
+        transform: translateY(-4px);
+    }
+
+    .spacer { height: 80px; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<header id="navbar">
+     <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/784/784197.png" alt="Website Logo">
+    </div>
+     <nav>
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="https://forms.gle/sNuH5YY4DBaRjREE6">Feedback</a></li>
+            <li id="profileNavItem" style="display:none;">
+              <a href="profile.html"><i class="fas fa-user-md" style="font-size:20px;"></i></a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="spacer"></div>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+    <div class="hero-text">
+       <h1>Welcome, <span>Doctor</span></h1>
+        <p>Manage your chronic disease patients with AI-powered tools for diabetes, hypertension, and heart disease prediction.</p>
+       <a href="risk.html" class="btn-primary">Check Risk Level</a>
+    </div>
+    <div class="hero-image">
+        <img src="https://cdn-icons-png.flaticon.com/512/387/387561.png" alt="Doctor Illustration">
+    </div>
+    <i class="fas fa-user-md icon icon1"></i>
+    <i class="fas fa-hospital icon icon2"></i>
+    <i class="fas fa-notes-medical icon icon3"></i>
+</section>
+
+<!-- Info Sections -->
+<section class="info-section" onclick="window.location.href='doc_patient.html'">
+  <div class="info-content">
+    <div class="info-image">
+      <img src="https://cdn-icons-png.flaticon.com/512/11457/11457899.png" alt="Dashboard Monitoring">
+    </div>
+    <div class="info-text">
+      <h2>Patient Dashboard Monitoring</h2>
+      <p>Monitor chronic disease patients with interactive dashboards and track thier health.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="interactive-boxes">
+        <a href="download.html" class="box">Download Mobile App</a>
+
+        <a href="resource_art.html" class="box">Resources & Articles</a>
+    </div>
+</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+    authDomain: "cognizant-a271c.firebaseapp.com",
+    projectId: "cognizant-a271c",
+    storageBucket: "cognizant-a271c.firebasestorage.app",
+    messagingSenderId: "492673749628",
+    appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+    measurementId: "G-SQD06X6T7V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "signin.html";
+    } else {
+      console.log("✅ Doctor logged in:", user.email);
+
+      const profileItem = document.getElementById("profileNavItem");
+      profileItem.style.display = "block";
+
+      let li = document.createElement("li");
+      li.innerHTML = `<button id="signOutBtn">Sign Out</button>`;
+      profileItem.parentNode.insertBefore(li, profileItem);
+
+      const q = query(collection(db, "doctors"), where("userId", "==", user.uid));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const data = querySnapshot.docs[0].data();
+        console.log("👨‍⚕️ Doctor Profile:", data);
+
+        const profileName = document.createElement("span");
+        profileName.innerText = `Hi, ${data.name || "Doctor"}`;
+        profileName.style.marginLeft = "10px";
+        profileItem.appendChild(profileName);
+      } else {
+        console.log("⚠️ No doctor profile found.");
+      }
+
+      document.getElementById("signOutBtn").addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+          alert("Signed out successfully!");
+          window.location.href = "signin.html";
+        } catch (error) {
+          alert("Sign out failed: " + error.message);
+        }
+      });
+    }
+  });
+
+  window.addEventListener("scroll", () => {
+    let nav = document.getElementById("navbar");
+    if (window.scrollY > 50) nav.classList.add("scrolled");
+    else nav.classList.remove("scrolled");
+  });
+</script>
+
+</body>
+</html>

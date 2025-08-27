@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Prediction & Care Plan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .switch {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .switch label {
+      flex: 1;
+    }
+    .switch input {
+      width: 20px;
+      height: 20px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #predictBtn { background: #007bff; color: white; }
+    #downloadBtn { background: #28a745; color: white; display: none; }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #eef;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Risk Prediction & Care Plan</h2>
+
+    <!-- Basic Info -->
+    <div class="input-group"><label>Patient ID</label><input type="text" id="patient_id"></div>
+    <div class="input-group"><label>Name</label><input type="text" id="name"></div>
+    <div class="input-group"><label>Age</label><input type="number" id="age"></div>
+    <div class="input-group"><label>Gender (0=Female,1=Male)</label><input type="number" id="gender"></div>
+
+    <!-- Numeric Inputs -->
+    <div class="input-group"><label>Systolic BP</label><input type="number" id="systolic"></div>
+    <div class="input-group"><label>Diastolic BP</label><input type="number" id="diastolic"></div>
+    <div class="input-group"><label>Blood Pressure (avg)</label><input type="number" id="blood_pressure"></div>
+    <div class="input-group"><label>BMI</label><input type="number" id="bmi"></div>
+    <div class="input-group"><label>Cholesterol</label><input type="number" id="cholesterol"></div>
+    <div class="input-group"><label>Glucose</label><input type="number" id="glucose"></div>
+    <div class="input-group"><label>HbA1c</label><input type="number" id="HbA1c"></div>
+    <div class="input-group"><label>Insulin</label><input type="number" id="insulin"></div>
+    <div class="input-group"><label>Heart Rate</label><input type="number" id="heart_rate"></div>
+    <div class="input-group"><label>Diabetes Pedigree</label><input type="number" id="diabetes_pedigree"></div>
+    <div class="input-group"><label>Poor Health Days</label><input type="number" id="poor_health_days"></div>
+    <div class="input-group"><label>Max Heart Rate</label><input type="number" id="max_heart_rate"></div>
+
+    <!-- Yes/No Switches -->
+    <div class="switch"><label>Smoking:</label><input type="checkbox" id="smoking"></div>
+    <div class="switch"><label>Alcohol:</label><input type="checkbox" id="alcohol"></div>
+    <div class="switch"><label>Family History:</label><input type="checkbox" id="family_history"></div>
+    <div class="switch"><label>Physical Activity:</label><input type="checkbox" id="physical_activity"></div>
+    <div class="switch"><label>High Sodium Intake:</label><input type="checkbox" id="sodium_intake"></div>
+    <div class="switch"><label>Fruit Consumption:</label><input type="checkbox" id="fruit"></div>
+    <div class="switch"><label>Veggie Consumption:</label><input type="checkbox" id="veggies"></div>
+    <div class="switch"><label>Stroke History:</label><input type="checkbox" id="stroke"></div>
+    <div class="switch"><label>Fasting Blood Sugar:</label><input type="checkbox" id="fasting_blood_sugar"></div>
+
+    <button id="predictBtn">Predict Risk</button>
+    <button id="downloadBtn">Download Care Plan PDF</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+  const API_URL = "https://72593382ddae.ngrok-free.app";
+
+  document.getElementById("predictBtn").addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    // Build payload
+    const data = {
+      patient_id: document.getElementById("patient_id").value,
+      name: document.getElementById("name").value,
+      age: +document.getElementById("age").value,
+      gender: +document.getElementById("gender").value,
+      systolic: +document.getElementById("systolic").value,
+      diastolic: +document.getElementById("diastolic").value,
+      blood_pressure: +document.getElementById("blood_pressure").value,
+      cholesterol: +document.getElementById("cholesterol").value,
+      bmi: +document.getElementById("bmi").value,
+      glucose: +document.getElementById("glucose").value,
+      HbA1c: +document.getElementById("HbA1c").value,
+      insulin: +document.getElementById("insulin").value,
+      heart_rate: +document.getElementById("heart_rate").value,
+      smoking: document.getElementById("smoking").checked ? 1 : 0,
+      alcohol: document.getElementById("alcohol").checked ? 1 : 0,
+      family_history: document.getElementById("family_history").checked ? 1 : 0,
+      physical_activity: document.getElementById("physical_activity").checked ? 1 : 0,
+      sodium_intake: document.getElementById("sodium_intake").checked ? 1 : 0,
+      fruit: document.getElementById("fruit").checked ? 1 : 0,
+      veggies: document.getElementById("veggies").checked ? 1 : 0,
+      stroke: document.getElementById("stroke").checked ? 1 : 0,
+      fasting_blood_sugar: document.getElementById("fasting_blood_sugar").checked ? 1 : 0,
+      diabetes_pedigree: +document.getElementById("diabetes_pedigree").value,
+      poor_health_days: +document.getElementById("poor_health_days").value,
+      max_heart_rate: +document.getElementById("max_heart_rate").value,
+    };
+
+    try {
+      const response = await fetch(`${API_URL}/predict`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error("API Error");
+
+      const result = await response.json();
+
+      // Show result with care plan
+      document.getElementById("result").innerHTML = `
+        <h3>Prediction Result</h3>
+        <p><b>Risk:</b> ${result.risk}</p>
+        <p><b>Recommendation:</b> ${result.recommendation}</p>
+        <h4>Care Plan</h4>
+        <p>${result.care_plan || "Your personalized care plan will appear here."}</p>
+      `;
+
+      document.getElementById("downloadBtn").style.display = "block";
+
+      // PDF generation
+      document.getElementById("downloadBtn").onclick = () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text("Care Plan Report", 20, 20);
+        doc.text(`Patient: ${data.name} (ID: ${data.patient_id})`, 20, 30);
+        doc.text(`Risk: ${result.risk}`, 20, 50);
+        doc.text(`Recommendation: ${result.recommendation}`, 20, 65);
+        doc.text("Care Plan:", 20, 80);
+        doc.text(doc.splitTextToSize(result.care_plan || "No detailed plan provided.", 170), 20, 90);
+        doc.save("CarePlan.pdf");
+      };
+
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  });
+  </script>
+</body>
+</html>

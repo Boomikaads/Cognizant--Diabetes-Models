@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Tips - Sepsis Awareness</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', sans-serif; background-color: #f8faff; color: #002a4d; }
+
+    /* Navbar (same as new.html) */
+    header {
+        background: linear-gradient(90deg, #ffffff, #f0f6ff);
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0px 3px 15px rgba(0,0,0,0.08);
+        transition: 0.3s ease;
+    }
+    header .logo img { height: 45px; transition: transform 0.3s ease; }
+    nav ul { list-style: none; display: flex; gap: 25px; }
+    nav ul li a, nav ul li button {
+        color: #002a4d; text-decoration: none; font-weight: bold; background: none;
+        border: none; cursor: pointer; font-size: 15px; position: relative;
+    }
+    nav ul li a:hover { color: #0078ff; }
+
+    .spacer { height: 80px; }
+
+    /* Hero Section */
+    .hero {
+        padding: 100px 8% 60px;
+        text-align: center;
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    }
+    .hero h1 { font-size: 2.8rem; color: #002a4d; margin-bottom: 20px; }
+    .hero p { font-size: 1.2rem; color: #003366; max-width: 700px; margin: 0 auto; }
+
+    /* Tips Grid */
+    .tips {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 60px 8%;
+    }
+    .tip-card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+    }
+    .tip-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,120,255,0.2); }
+    .tip-card i {
+        font-size: 2.5rem; color: #0078ff; margin-bottom: 15px;
+    }
+    .tip-card h3 { font-size: 1.3rem; margin-bottom: 10px; }
+    .tip-card p { font-size: 1rem; line-height: 1.6; color: #444; }
+
+    /* Accordion Section */
+    .accordion { max-width: 800px; margin: 60px auto; }
+    .accordion-item {
+        background: #fff;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    .accordion-header {
+        padding: 15px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        color: #002a4d;
+    }
+    .accordion-header:hover { background: #f0f6ff; }
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 20px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        color: #333;
+    }
+    .accordion-content.open {
+        max-height: 300px;
+        padding: 15px 20px;
+    }
+
+    /* Footer (same as new.html) */
+    footer {
+        background: linear-gradient(180deg, #002a4d, #001a30);
+        padding: 40px 20px;
+        text-align: center;
+        color: #cfd8dc;
+        position: relative;
+        overflow: hidden;
+    }
+    .interactive-boxes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        z-index: 2;
+    }
+    .interactive-boxes .box {
+        background-color: white;
+        color: #004aad;
+        padding: 15px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .interactive-boxes .box:hover {
+        background-color: #0078ff; color: white; box-shadow: 0 0 15px #00e5ff;
+    }
+
+    /* Chatbot Floating Button */
+    .chatbot-btn {
+        position: fixed; bottom: 20px; right: 20px;
+        background: #0078ff; color: white; border: none;
+        border-radius: 50%; width: 60px; height: 60px;
+        font-size: 24px; cursor: pointer; z-index: 1000;
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header id="navbar">
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/784/784197.png" alt="Website Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="new.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="https://forms.gle/sNuH5YY4DBaRjREE6">Feedback</a></li>
+<li id="profileNavItem" style="display:none;">
+  <a href="profile.html"><i class="fas fa-user-circle" style="font-size:20px;"></i></a>
+</li>
+
+
+        </ul>
+    </nav>
+</header>
+<div class="spacer"></div>
+
+<!-- Hero -->
+<section class="hero">
+    <h1>Health Tips for Diabetes & Hypertension</h1>
+    <p>Early detection and healthy lifestyle choices can prevent severe complications from diabetes and high blood pressure. Learn simple steps to stay healthy and in control.</p>
+</section>
+
+<!-- Tips Cards -->
+<section class="tips">
+    <div class="tip-card">
+        <i class="fas fa-apple-alt"></i>
+        <h3>Eat a Balanced Diet</h3>
+        <p>Focus on fruits, vegetables, whole grains, lean proteins, and low-salt meals. Avoid processed foods and sugary drinks.</p>
+    </div>
+    <div class="tip-card">
+        <i class="fas fa-walking"></i>
+        <h3>Stay Physically Active</h3>
+        <p>Engage in at least 30 minutes of moderate activity like walking, cycling, or yoga most days of the week.</p>
+    </div>
+    <div class="tip-card">
+        <i class="fas fa-heartbeat"></i>
+        <h3>Monitor Regularly</h3>
+        <p>Keep track of your blood pressure and glucose levels. Regular monitoring helps catch risks early.</p>
+    </div>
+    <div class="tip-card">
+        <i class="fas fa-user-md"></i>
+        <h3>Visit Your Doctor</h3>
+        <p>Schedule regular check-ups. Professional guidance helps manage risks and adjust treatments on time.</p>
+    </div>
+</section>
+
+<!-- Interactive Accordion -->
+<section class="accordion">
+    <div class="accordion-item">
+        <div class="accordion-header">🔍 What are Diabetes & Hypertension? <i class="fas fa-chevron-down"></i></div>
+        <div class="accordion-content"><p>Diabetes is a condition where blood sugar levels are too high. Hypertension is persistently high blood pressure. Both can silently damage organs if left unmanaged.</p></div>
+    </div>
+    <div class="accordion-item">
+        <div class="accordion-header">⚠️ Early Warning Signs <i class="fas fa-chevron-down"></i></div>
+        <div class="accordion-content"><p>Frequent urination, excessive thirst, fatigue, headaches, and blurred vision are early signs. Always take them seriously.</p></div>
+    </div>
+    <div class="accordion-item">
+        <div class="accordion-header">✅ Prevention Tips <i class="fas fa-chevron-down"></i></div>
+        <div class="accordion-content"><p>Eat healthy, exercise regularly, avoid smoking & alcohol, reduce stress, and keep up with medical check-ups.</p></div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="interactive-boxes">
+        <a href="download.html" class="box">Download Mobile App</a>
+        <a href="health_tips.html" class="box">Health Tips</a>
+        <a href="resource_art.html" class="box">Resources & Articles</a>
+    </div>
+</footer>
+
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+  // ✅ Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+    authDomain: "cognizant-a271c.firebaseapp.com",
+    projectId: "cognizant-a271c",
+    storageBucket: "cognizant-a271c.firebasestorage.app",
+    messagingSenderId: "492673749628",
+    appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+    measurementId: "G-SQD06X6T7V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // 🔐 Guard: Allow only signed-in users
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "signin.html";
+    } else {
+      console.log("✅ User logged in:", user.email);
+
+      // Show profile icon
+      const profileItem = document.getElementById("profileNavItem");
+      profileItem.style.display = "block";
+
+      // Create Sign Out button
+      let li = document.createElement("li");
+      li.innerHTML = `<button id="signOutBtn">Sign Out</button>`;
+      profileItem.parentNode.insertBefore(li, profileItem);
+
+      // 📝 Fetch patient profile from Firestore
+      const q = query(collection(db, "patients"), where("userId", "==", user.uid));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const data = querySnapshot.docs[0].data();
+        console.log("📄 Patient Profile:", data);
+
+        // Example: Show user's name in navbar
+        const profileName = document.createElement("span");
+        profileName.innerText = `Hi, ${data.name || "User"}`;
+        profileName.style.marginLeft = "10px";
+        profileItem.appendChild(profileName);
+      } else {
+        console.log("⚠️ No profile found for this user.");
+      }
+
+      // Sign Out handler
+      document.getElementById("signOutBtn").addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+          alert("Signed out successfully!");
+          window.location.href = "signin.html";
+        } catch (error) {
+          alert("Sign out failed: " + error.message);
+        }
+      });
+    }
+  });
+
+  /* Animated Counters */
+function animateCounter(id, end, suffix="") {
+    let el = document.getElementById(id);
+    if (!el) return; // ✅ Stop if element not found
+
+    let start = 0;
+    let step = end / 100;
+    let interval = setInterval(() => {
+        start += step;
+        if (start >= end) { 
+            el.innerText = end + suffix;
+            clearInterval(interval);
+        } else {
+            el.innerText = Math.floor(start) + suffix;
+        }
+    }, 30);
+}
+
+
+window.addEventListener("load", () => {
+    animateCounter("patients", 25, "%");
+    animateCounter("hospitals", 30, "%");
+});
+
+
+  /* Navbar Scroll Effect */
+  window.addEventListener("scroll", () => {
+    let nav = document.getElementById("navbar");
+    if (window.scrollY > 50) nav.classList.add("scrolled");
+    else nav.classList.remove("scrolled");
+  });
+</script>
+</body>
+</html>

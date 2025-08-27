@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Staff</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #4f46e5;   /* Indigo */
+      --primary-hover: #4338ca;
+      --bg: #f9fafb;
+      --card-bg: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h1, h2 {
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    input, select {
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: var(--radius);
+      font-size: 14px;
+      outline: none;
+      transition: border 0.2s;
+      width: 100%;
+    }
+
+    input:focus {
+      border: 1px solid var(--primary);
+    }
+
+    button {
+      grid-column: 1 / -1;
+      padding: 14px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+    }
+
+    #profileSection {
+      background: #f3f4f6;
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    #profileDetails p {
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    #profileDetails strong {
+      color: var(--primary);
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="pageTitle">Paramedical Staff Profile</h1>
+
+    <!-- Profile Section -->
+    <div id="profileSection" style="display:none;">
+  <h2>My Profile</h2>
+  <div id="profileDetails"></div>
+  <button id="editBtn">Edit Details</button>
+</div>
+
+
+    <!-- Registration Form -->
+    <form id="staffForm" style="display:none;">
+      <input type="text" id="fullName" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="text" id="phone" placeholder="Phone" required />
+      <input type="text" id="address" placeholder="Address" required />
+      <input type="text" id="city" placeholder="City" required />
+      <input type="text" id="state" placeholder="State" required />
+      <input type="text" id="zip" placeholder="ZIP" required />
+      <input type="text" id="country" placeholder="Country" />
+      <input type="text" id="degree" placeholder="Degree" />
+      <input type="text" id="specialization" placeholder="Specialization" />
+      <input type="text" id="skills" placeholder="Skills" />
+      <input type="text" id="availability" placeholder="Availability" />
+      <input type="text" id="workingHours" placeholder="Working Hours" />
+      <input type="date" id="dob" placeholder="Date of Birth" />
+      <input type="text" id="gender" placeholder="Gender" />
+      <input type="text" id="languages" placeholder="Languages" />
+      <input type="text" id="licenseNumber" placeholder="License Number" />
+      <input type="date" id="licenseExpiry" placeholder="License Expiry" />
+      <button type="submit">Save Details</button>
+    </form>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs, addDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+    authDomain: "cognizant-a271c.firebaseapp.com",
+    projectId: "cognizant-a271c",
+    storageBucket: "cognizant-a271c.firebasestorage.app",
+    messagingSenderId: "492673749628",
+    appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+    measurementId: "G-SQD06X6T7V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  let currentDocId = null;
+  let currentData = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const q = query(collection(db, "promed"), where("email", "==", user.email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const docSnap = querySnapshot.docs[0];
+        currentDocId = docSnap.id;
+        currentData = docSnap.data();
+        showProfile(currentData);
+      } else {
+        document.getElementById("staffForm").style.display = "grid";
+      }
+    } else {
+      alert("Please sign in first.");
+    }
+  });
+
+  function showProfile(data) {
+    document.getElementById("staffForm").style.display = "none";
+    document.getElementById("profileSection").style.display = "block";
+
+    let html = "";
+    for (let key in data) {
+      html += `<p><strong>${key}:</strong> ${data[key]}</p>`;
+    }
+    document.getElementById("profileDetails").innerHTML = html;
+  }
+
+  function editProfile() {
+  document.getElementById("profileSection").style.display = "none";
+  document.getElementById("staffForm").style.display = "grid";
+
+  // ✅ Pre-fill form with existing data
+  if (currentData) {
+    for (let key in currentData) {
+      if (document.getElementById(key)) {
+        document.getElementById(key).value = currentData[key];
+      }
+    }
+  }
+}
+
+document.getElementById("editBtn").addEventListener("click", editProfile);
+
+
+  document.getElementById("staffForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const user = auth.currentUser;
+    if (!user) return alert("Please log in first.");
+
+    const data = {
+      fullName: document.getElementById("fullName").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      address: document.getElementById("address").value,
+      city: document.getElementById("city").value,
+      state: document.getElementById("state").value,
+      zip: document.getElementById("zip").value,
+      country: document.getElementById("country").value,
+      degree: document.getElementById("degree").value,
+      specialization: document.getElementById("specialization").value,
+      skills: document.getElementById("skills").value,
+      availability: document.getElementById("availability").value,
+      workingHours: document.getElementById("workingHours").value,
+      dob: document.getElementById("dob").value,
+      gender: document.getElementById("gender").value,
+      languages: document.getElementById("languages").value,
+      licenseNumber: document.getElementById("licenseNumber").value,
+      licenseExpiry: document.getElementById("licenseExpiry").value,
+      createdAt: currentData?.createdAt || new Date().toLocaleString()
+    };
+
+    if (currentDocId) {
+      const docRef = doc(db, "promed", currentDocId);
+      await setDoc(docRef, data, { merge: true });
+      alert("Profile updated!");
+    } else {
+      await addDoc(collection(db, "promed"), data);
+      alert("Profile created!");
+    }
+
+    currentData = data;
+    showProfile(data);
+  });
+</script>
+
+</body>
+</html>

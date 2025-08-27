@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramedical Professional Search</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #002a4d;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 2rem;
+      color: #004d99;
+    }
+
+    p {
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    .staff-section {
+      background: #f1f9ff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      border-left: 5px solid #0078ff;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #0078ff;
+      color: white;
+      padding: 12px 25px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #005fcc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,120,255,0.3);
+    }
+
+    .search-form {
+      background: #fdfdfd;
+      padding: 25px;
+      border-radius: 12px;
+      border-left: 5px solid #ff9800;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 2px solid #cfd8dc;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #0078ff;
+      box-shadow: 0 0 8px rgba(0,120,255,0.3);
+    }
+
+    .results {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 12px;
+      border: 1px dashed #bbb;
+      display: none;
+    }
+
+    .result-card {
+      background: #fff;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .result-card:hover {
+      background: #e3f2fd;
+      transform: translateY(-2px);
+    }
+
+    /* Popup Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      color: #004d99;
+    }
+    .close-btn {
+      float: right;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #888;
+    }
+    .close-btn:hover {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Paramedical Professionals</h1>
+    <p>Are you a paramedical staff member, or are you a patient looking for assistance?</p>
+
+    <div class="staff-section">
+      <h2>Are you a Paramedical Staff?</h2>
+      <p>Register with us and make your services available to patients in need.</p>
+      <button class="btn" onclick="window.location.href='register-staff.html'">Register as Staff</button>
+    </div>
+
+    <div class="search-form">
+      <h2>Patient Search</h2>
+      <p>Find paramedical professionals by city and specialization.</p>
+
+      <div class="form-group">
+        <label for="city">Enter Your City</label>
+        <input type="text" id="city" placeholder="Enter the place">
+      </div>
+
+      <div class="form-group">
+        <label for="specialization">Choose Specialization</label>
+        <input type="text" id="specialization" placeholder="Enter the specialization">
+      </div>
+
+      <button class="btn" onclick="searchProfessionals()">Search</button>
+
+      <div class="results" id="results"></div>
+    </div>
+  </div>
+
+  <!-- Popup Modal -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+    authDomain: "cognizant-a271c.firebaseapp.com",
+    projectId: "cognizant-a271c",
+    storageBucket: "cognizant-a271c.firebasestorage.app",
+    messagingSenderId: "492673749628",
+    appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+    measurementId: "G-SQD06X6T7V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function searchProfessionals() {
+    const city = document.getElementById('city').value.trim().toLowerCase();
+    const specialization = document.getElementById('specialization').value.trim().toLowerCase();
+    const resultsDiv = document.getElementById('results');
+
+    if (!city || !specialization) {
+      alert("⚠️ Please enter both city and specialization to search.");
+      return;
+    }
+
+    resultsDiv.style.display = "block";
+    resultsDiv.innerHTML = `<p>⏳ Searching...</p>`;
+
+    try {
+      const promedRef = collection(db, "promed");
+      const q = query(promedRef, where("city", "==", city), where("degree", "==", specialization));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        resultsDiv.innerHTML = `<p>No professionals found for <b>${specialization}</b> in <b>${city}</b>.</p>`;
+        return;
+      }
+
+      let resultsHTML = "<h3>🔍 Professionals Found</h3>";
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        resultsHTML += `
+          <div class="result-card" onclick='showDetails(${JSON.stringify(JSON.stringify(data))})'>
+            <h4>${data.fullName} (${data.degree})</h4>
+          </div>
+        `;
+      });
+
+      resultsDiv.innerHTML = resultsHTML;
+
+    } catch (error) {
+      console.error("Error fetching professionals:", error);
+      resultsDiv.innerHTML = `<p style="color:red;">❌ Error fetching data. Check console.</p>`;
+    }
+  }
+
+  window.searchProfessionals = searchProfessionals;
+
+  // Popup functions
+  window.showDetails = function(dataStr) {
+    const data = JSON.parse(dataStr);
+    document.getElementById('modalBody').innerHTML = `
+      <h3>${data.fullName} (${data.degree})</h3>
+      <p><b>City:</b> ${data.city}</p>
+      <p><b>Availability:</b> ${data.availability}</p>
+      <p><b>Email:</b> ${data.email}</p>
+      <p><b>Phone:</b> ${data.phone || "N/A"}</p>
+      <p><b>Languages:</b> ${data.languages}</p>
+      <p><b>Gender:</b> ${data.gender}</p>
+      <p><b>License Number:</b> ${data.licenseNumber}</p>
+    `;
+    document.getElementById('profileModal').style.display = "flex";
+  }
+
+  window.closeModal = function() {
+    document.getElementById('profileModal').style.display = "none";
+  }
+  </script>
+
+</body>
+</html>

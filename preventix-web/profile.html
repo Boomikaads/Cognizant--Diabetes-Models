@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Profile</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      color: #333;
+    }
+
+    header {
+      background: #0078ff;
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    header button {
+      background: white;
+      color: #0078ff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    header button:hover {
+      background: #f0f6ff;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .profile-card {
+      display: flex;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      width: 850px;
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .profile-left {
+      flex: 1;
+      background: #f0f6ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .profile-left img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 6px solid #fff;
+      object-fit: cover;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .profile-right {
+      flex: 2;
+      padding: 30px;
+    }
+
+    .profile-name {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .profile-role {
+      font-size: 0.95rem;
+      color: #0078ff;
+      margin-bottom: 16px;
+    }
+
+    .info-row {
+      display: flex;
+      margin: 10px 0;
+    }
+
+    .label {
+      width: 160px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .value {
+      color: #222;
+    }
+
+    .male img { animation: maleGlow 2s infinite alternate; }
+    .female img { animation: femaleGlow 2s infinite alternate; }
+
+    @keyframes maleGlow {
+      from { box-shadow: 0 0 15px rgba(0,120,255,0.4); }
+      to   { box-shadow: 0 0 25px rgba(0,120,255,0.8); }
+    }
+    @keyframes femaleGlow {
+      from { box-shadow: 0 0 15px rgba(255,105,180,0.4); }
+      to   { box-shadow: 0 0 25px rgba(255,105,180,0.8); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-card {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      width: 420px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #fafafa;
+    }
+
+    button.save {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background: #0078ff;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 16px;
+      font-size: 1rem;
+    }
+
+    button.save:hover { background: #005fcc; }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>My Profile</h2>
+    <button id="addMemberBtn" style="display:none;">+ Add / Edit Profile</button>
+  </header>
+
+  <div class="container">
+    <!-- Profile Card -->
+    <div class="profile-card fade" id="profileCard" style="display:none;">
+      <div class="profile-left" id="profilePicWrapper">
+        <img src="https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg" alt="Profile Picture" id="profileImage">
+      </div>
+      <div class="profile-right">
+        <div class="profile-name" id="pName"></div>
+        <div class="profile-role" id="profileRole"></div>
+
+        <div id="patientDetails" style="display:none;">
+  <div class="info-row"><span class="label">Gender:</span> <span class="value" id="pGender"></span></div>
+  <div class="info-row"><span class="label">DOB:</span> <span class="value" id="pDob"></span></div>
+  <div class="info-row"><span class="label">Blood Group:</span> <span class="value" id="pBloodGroup"></span></div>
+  <div class="info-row"><span class="label">Height:</span> <span class="value" id="pHeight"></span></div>
+  <div class="info-row"><span class="label">Weight:</span> <span class="value" id="pWeight"></span></div>
+  <div class="info-row"><span class="label">Phone:</span> <span class="value" id="pPhone"></span></div>
+  <div class="info-row"><span class="label">Home Address:</span> <span class="value" id="pAddress"></span></div>
+  <div class="info-row"><span class="label">Primary Diagnosis:</span> <span class="value" id="pDiagnosis"></span></div>
+
+  <!-- NEW display fields -->
+  <div class="info-row"><span class="label">Doctor:</span> <span class="value" id="pDoctor"></span></div>
+  <div class="info-row"><span class="label">Doctor’s Hospital:</span> <span class="value" id="pDoctorHospital"></span></div>
+</div>
+
+        <div id="doctorDetails" style="display:none;">
+          <div class="info-row"><span class="label">Specialization:</span> <span class="value" id="dSpecialization"></span></div>
+          <div class="info-row"><span class="label">Hospital:</span> <span class="value" id="dHospital"></span></div>
+          <div class="info-row"><span class="label">License No.:</span> <span class="value" id="dLicense"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patient Form -->
+    <div class="form-card fade" id="patientForm" style="display:none;">
+  <h3>Patient Profile</h3>
+  <input type="text" id="name" placeholder="Full Name">
+  <select id="gender">
+    <option value="">Select Gender</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+    <option value="other">Other</option>
+  </select>
+  <input type="date" id="dob">
+  <select id="bloodGroup">
+    <option value="">Select Blood Group</option>
+    <option value="A+">A+</option>
+    <option value="A-">A-</option>
+    <option value="B+">B+</option>
+    <option value="B-">B-</option>
+    <option value="O+">O+</option>
+    <option value="O-">O-</option>
+    <option value="AB+">AB+</option>
+    <option value="AB-">AB-</option>
+  </select>
+  <input type="number" id="height" placeholder="Height (cm)">
+  <input type="number" id="weight" placeholder="Weight (kg)">
+  <input type="text" id="phone" placeholder="Phone">
+  <input type="text" id="address" placeholder="Home Address">
+  <input type="text" id="diagnosis" placeholder="Primary Diagnosis">
+
+  <!-- NEW Doctor fields for patients -->
+  <input type="text" id="patientDoctor" placeholder="Doctor’s Name">
+  <input type="text" id="patientDoctorHospital" placeholder="Doctor’s Hospital">
+
+  <button class="save" id="savePatientBtn">💾 Save Patient Profile</button>
+</div>
+
+    <!-- Doctor Form -->
+    <div class="form-card fade" id="doctorForm" style="display:none;">
+      <h3>Doctor Profile</h3>
+      <input type="text" id="dName" placeholder="Full Name">
+      <input type="text" id="dSpecializationInput" placeholder="Specialization">
+      <input type="text" id="dHospitalInput" placeholder="Hospital">
+      <input type="text" id="dLicenseInput" placeholder="License Number">
+      <button class="save" id="saveDoctorBtn">💾 Save Doctor Profile</button>
+    </div>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+    authDomain: "cognizant-a271c.firebaseapp.com",
+    projectId: "cognizant-a271c",
+    storageBucket: "cognizant-a271c.appspot.com",
+    messagingSenderId: "492673749628",
+    appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+    measurementId: "G-SQD06X6T7V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+// UI references
+const profileCard = document.getElementById("profileCard");
+const patientForm = document.getElementById("patientForm");
+const doctorForm = document.getElementById("doctorForm");
+const addMemberBtn = document.getElementById("addMemberBtn");
+
+const pName = document.getElementById("pName");
+const pGender = document.getElementById("pGender");
+const pDob = document.getElementById("pDob");
+const pBloodGroup = document.getElementById("pBloodGroup");
+const pHeight = document.getElementById("pHeight");
+const pWeight = document.getElementById("pWeight");
+const pPhone = document.getElementById("pPhone");
+const pAddress = document.getElementById("pAddress");
+const pDiagnosis = document.getElementById("pDiagnosis");
+const pDoctor = document.getElementById("pDoctor");
+const pDoctorHospital = document.getElementById("pDoctorHospital");
+
+// ❌ Removed dName reference (not in HTML)
+const dSpecialization = document.getElementById("dSpecialization");
+const dHospital = document.getElementById("dHospital");
+const dLicense = document.getElementById("dLicense");
+
+const profileRole = document.getElementById("profileRole");
+
+
+  let userId = null;
+  let userRole = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "signin.html";
+    } else {
+      userId = user.uid;
+
+      // Check if user is patient
+      let q = query(collection(db, "patients"), where("userId", "==", userId));
+      let querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        userRole = "patient";
+        const data = querySnapshot.docs[0].data();
+
+        profileCard.style.display = "block";
+        patientForm.style.display = "none";
+        doctorForm.style.display = "none";
+        addMemberBtn.style.display = "block";
+        profileRole.textContent = "Patient Details";
+
+        pName.textContent = data.name || "";
+        pGender.textContent = data.gender || "";
+        pDob.textContent = data.dob || "";
+        pBloodGroup.textContent = data.bloodGroup || "";
+        pHeight.textContent = data.height ? data.height + " cm" : "";
+        pWeight.textContent = data.weight ? data.weight + " kg" : "";
+        pPhone.textContent = data.phone || "";
+        pAddress.textContent = data.homeAddress || "";
+        pDiagnosis.textContent = data.primaryDiagnosis || "";
+        pDoctor.textContent = data.doctor || "";
+        pDoctorHospital.textContent = data.doctorHospital || "";
+
+        document.getElementById("patientDetails").style.display = "block";
+
+        if (data.gender && data.gender.toLowerCase() === "male") {
+          document.getElementById("profilePicWrapper").classList.add("male");
+        } else if (data.gender && data.gender.toLowerCase() === "female") {
+          document.getElementById("profilePicWrapper").classList.add("female");
+        }
+        return;
+      }
+
+      // Check if user is doctor
+      q = query(collection(db, "doctors"), where("userId", "==", userId));
+      querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+  userRole = "doctor";
+  const data = querySnapshot.docs[0].data();
+
+  profileCard.style.display = "block";
+  patientForm.style.display = "none";
+  doctorForm.style.display = "none";
+  addMemberBtn.style.display = "block";
+  profileRole.textContent = "Doctor Details";
+
+  // ✅ Use pName for doctor’s name
+  pName.textContent = data.name || "";
+  dSpecialization.textContent = data.specialization || "";
+  dHospital.textContent = data.hospital || "";
+  dLicense.textContent = data.license || "";
+
+  document.getElementById("doctorDetails").style.display = "block";
+  return;
+}
+
+
+      // No profile found
+      if (!userRole) {
+        patientForm.style.display = "block"; // default new users
+      }
+    }
+  });
+
+  // Save Patient
+document.getElementById("savePatientBtn").addEventListener("click", async () => {
+  const q = query(collection(db, "patients"), where("userId", "==", userId));
+  const querySnapshot = await getDocs(q);
+
+  const patientData = {
+    name: document.getElementById("name").value,
+    gender: document.getElementById("gender").value,
+    dob: document.getElementById("dob").value,
+    bloodGroup: document.getElementById("bloodGroup").value,
+    height: document.getElementById("height").value,
+    weight: document.getElementById("weight").value,
+    phone: document.getElementById("phone").value,
+    homeAddress: document.getElementById("address").value,
+    primaryDiagnosis: document.getElementById("diagnosis").value,
+    doctor: document.getElementById("patientDoctor").value,
+    doctorHospital: document.getElementById("patientDoctorHospital").value
+  };
+
+  let patientDocRef;
+  if (!querySnapshot.empty) {
+    patientDocRef = querySnapshot.docs[0].ref;
+    await updateDoc(patientDocRef, patientData);
+  } else {
+    patientDocRef = await addDoc(collection(db, "patients"), {
+      userId,
+      email: auth.currentUser.email,
+      ...patientData,
+      createdAt: new Date()
+    });
+  }
+
+  // 🔹 Step 2: Link patient under doctor’s subcollection
+  if (patientData.doctor && patientData.doctorHospital) {
+    const doctorQuery = query(
+      collection(db, "doctors"),
+      where("name", "==", patientData.doctor),
+      where("hospital", "==", patientData.doctorHospital)
+    );
+    const doctorSnap = await getDocs(doctorQuery);
+
+    if (!doctorSnap.empty) {
+      const doctorDocRef = doctorSnap.docs[0].ref;
+
+      // Add/Update patient under doctor’s "patients" subcollection
+      await addDoc(collection(doctorDocRef, "patients"), {
+        patientId: patientDocRef.id,
+        ...patientData,
+        linkedAt: new Date()
+      });
+    } else {
+      console.warn("⚠️ Doctor not found for linking:", patientData.doctor);
+    }
+  }
+
+  alert("✅ Patient profile saved!");
+  window.location.reload();
+});
+
+
+  // Save Doctor
+  document.getElementById("saveDoctorBtn").addEventListener("click", async () => {
+    const q = query(collection(db, "doctors"), where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+
+    const doctorData = {
+      name: document.getElementById("dName").value,
+      specialization: document.getElementById("dSpecializationInput").value,
+      hospital: document.getElementById("dHospitalInput").value,
+      license: document.getElementById("dLicenseInput").value
+    };
+
+    if (!querySnapshot.empty) {
+      await updateDoc(querySnapshot.docs[0].ref, doctorData);
+    } else {
+      await addDoc(collection(db, "doctors"), {
+        userId,
+        email: auth.currentUser.email,
+        ...doctorData,
+        createdAt: new Date()
+      });
+    }
+
+    alert("✅ Doctor profile saved!");
+    window.location.reload();
+  });
+
+  // Add/Edit button handler
+  addMemberBtn.addEventListener("click", () => {
+    profileCard.style.display = "none";
+    addMemberBtn.style.display = "none";
+    if (userRole === "patient") {
+      patientForm.style.display = "block";
+    } else if (userRole === "doctor") {
+      doctorForm.style.display = "block";
+    }
+  });
+</script>
+
+</body>
+</html>

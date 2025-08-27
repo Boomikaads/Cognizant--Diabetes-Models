@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Analytics</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .dashboard-card {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #343a40;
+    }
+
+    iframe {
+      border-radius: 10px;
+      border: none;
+      width: 100%;
+      height: 600px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: box-shadow 0.2s;
+    }
+
+    iframe:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .back-btn {
+      margin-bottom: 20px;
+    }
+
+    .no-access {
+      text-align: center;
+      padding: 40px;
+      font-size: 1.2rem;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <a href="patients.html" class="btn btn-secondary back-btn">← Back to Patients</a>
+  <h1>Patient Analytics</h1>
+
+  <div class="dashboard-card" id="dashboardContainer">
+    <!-- Content inserted via JS -->
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Get patientId from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const patientId = urlParams.get('patientId');
+
+  const dashboardContainer = document.getElementById("dashboardContainer");
+
+  if (patientId === "1") {
+    // Replace with your actual Power BI report & tenant details
+    const reportId = "cdc8bf1a-7d31-44c4-98fa-99747abee8f6";
+    const tenantId = "aa3af44b-87c9-4e06-85a6-5114d8e3bb10";
+
+    // Build Power BI embed URL (without filters, since only ID 1 is allowed)
+    const powerBIEmbedURL = `https://app.powerbi.com/reportEmbed?reportId=${reportId}&autoAuth=true&ctid=${tenantId}&filter=Patients/PatientID eq '1'`;
+
+    dashboardContainer.innerHTML = `<iframe src="${powerBIEmbedURL}" allowfullscreen></iframe>`;
+  } else {
+    // Show message if not patientId = 1
+    dashboardContainer.innerHTML = `<div class="no-access">⚠️ Analytics are only available for Patient ID 1.</div>`;
+  }
+</script>
+
+</body>
+</html>

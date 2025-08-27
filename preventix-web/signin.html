@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Sepsis Awareness</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #dce6ff;
+    }
+
+    .auth-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: white;
+      width: 90%;
+      max-width: 950px;
+      height: 650px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #ccc;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      background: #f0f0f0;
+      transition: 0.3s;
+    }
+    .tab.active {
+      background: #007bff;
+      color: white;
+    }
+
+    .form-section {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .form-section h2 {
+      margin-bottom: 10px;
+      color: #222;
+      font-size: 2rem;
+    }
+    .form-section p {
+      margin-bottom: 30px;
+      color: #666;
+      font-size: 0.95rem;
+    }
+    .input-group {
+      margin-bottom: 18px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #333;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1.5px solid #ccc;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    .input-group input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 6px rgba(0,123,255,0.3);
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #007bff;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-primary:hover {
+      background: #0056c7;
+    }
+    .toggle-text {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .toggle-text span {
+      color: #007bff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .visual-section {
+      background: #f5f7ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .visual-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 850px) {
+      .auth-wrapper {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .visual-section {
+        display: none;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <div class="auth-wrapper">
+    <!-- Left: Form -->
+    <div class="form-section">
+      <div class="tabs">
+        <div class="tab active" id="patientTab">Patient / Paramedical</div>
+        <div class="tab" id="doctorTab">Doctor</div>
+      </div>
+
+      <h2 id="formTitle">Sign In</h2>
+      <p id="formSubtitle">Welcome back! Please sign in to continue.</p>
+
+      <div class="input-group">
+        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="input-group">
+        <label for="password"><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+      </div>
+
+      <button class="btn-primary" id="signInBtn">Sign In</button>
+      <button class="btn-primary" id="signUpBtn" style="display:none;">Sign Up</button>
+
+      <div class="toggle-text">
+        <span id="toggleForm">Don’t have an account? Sign Up</span>
+      </div>
+    </div>
+
+    <!-- Right: Image -->
+    <div class="visual-section">
+      <img src="https://cdn.goodmanlantern.com/wp-content/uploads/2023/12/Group-7616.svg" alt="Chronic Disease Awareness">
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+      authDomain: "cognizant-a271c.firebaseapp.com",
+      projectId: "cognizant-a271c",
+      storageBucket: "cognizant-a271c.firebasestorage.app",
+      messagingSenderId: "492673749628",
+      appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+      measurementId: "G-SQD06X6T7V"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let isSignUp = false;
+    let currentRole = "patients";
+
+    const patientTab = document.getElementById("patientTab");
+    const doctorTab = document.getElementById("doctorTab");
+
+    patientTab.addEventListener("click", () => {
+      currentRole = "patients";
+      patientTab.classList.add("active");
+      doctorTab.classList.remove("active");
+    });
+
+    doctorTab.addEventListener("click", () => {
+      currentRole = "doctors";
+      doctorTab.classList.add("active");
+      patientTab.classList.remove("active");
+    });
+
+    const toggle = document.getElementById("toggleForm");
+    const formTitle = document.getElementById("formTitle");
+    const formSubtitle = document.getElementById("formSubtitle");
+    const signInBtn = document.getElementById("signInBtn");
+    const signUpBtn = document.getElementById("signUpBtn");
+
+    toggle.addEventListener("click", () => {
+      isSignUp = !isSignUp;
+      formTitle.innerText = isSignUp ? "Create Account" : "Sign In";
+      formSubtitle.innerText = isSignUp ? "Join us today! Please sign up to continue." : "Welcome back! Please sign in to continue.";
+      signInBtn.style.display = isSignUp ? "none" : "block";
+      signUpBtn.style.display = isSignUp ? "block" : "none";
+      toggle.innerText = isSignUp ? "Already have an account? Sign In" : "Don’t have an account? Sign Up";
+    });
+
+    // Sign In with role check
+    signInBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const uid = userCredential.user.uid;
+
+        const roleCollection = collection(db, currentRole);
+        const q = query(roleCollection, where("userId", "==", uid));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          alert("❌ You are not registered under this role. Please select the correct tab.");
+          await signOut(auth);
+          return;
+        }
+
+        window.location.href = currentRole === "patients" ? "new.html" : "doctor-main.html";
+      } catch (err) {
+        alert("❌ " + err.message);
+      }
+    });
+
+    // Sign Up (same structure for patients and doctors)
+    signUpBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCredential.user.uid;
+
+        if (currentRole === "patients") {
+          await addDoc(collection(db, "patients"), {
+            userId: uid,
+            email: email,
+            name: "",
+            dob: "",
+            gender: "",
+            createdAt: new Date()
+          });
+        } else {
+          await addDoc(collection(db, "doctors"), {
+            userId: uid,
+            email: email,
+            name: "",
+            specialization: "",
+            license: "",
+            hospital: "",
+            createdAt: new Date()
+          });
+        }
+
+        window.location.href = currentRole === "patients" ? "new.html" : "doctor-main.html";
+      } catch (err) {
+        alert("❌ " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | Sepsis Awareness & Prediction</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', sans-serif; background-color: #f8faff; color: #002a4d; }
+
+    /* Navbar (same as new.html) */
+    header {
+        background: linear-gradient(90deg, #ffffff, #f0f6ff);
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0px 3px 15px rgba(0,0,0,0.08);
+        transition: 0.3s ease;
+    }
+    header.scrolled { background: #ffffff; }
+    header .logo img { height: 45px; transition: transform 0.3s ease; }
+    header .logo img:hover { transform: rotate(-8deg) scale(1.1); }
+    nav ul { list-style: none; display: flex; gap: 25px; }
+    nav ul li a, nav ul li button {
+        color: #002a4d;
+        text-decoration: none;
+        font-weight: bold;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        transition: color 0.3s ease, transform 0.2s ease;
+        position: relative;
+    }
+    nav ul li a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+        width: 0%;
+        height: 2px;
+        background: #0078ff;
+        transition: width 0.3s ease;
+    }
+    nav ul li a:hover::after { width: 100%; }
+    nav ul li a:hover { color: #0078ff; transform: scale(1.05); }
+
+    .spacer { height: 80px; }
+
+    /* Hero Banner */
+    .about-hero {
+        height: 60vh;
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .about-hero h1 {
+        font-size: 3rem;
+        color: #002a4d;
+        animation: fadeInDown 1.5s ease;
+    }
+    .about-hero p {
+        font-size: 1.2rem;
+        margin-top: 15px;
+        color: #004aad;
+        animation: fadeInUp 2s ease;
+    }
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* About Section */
+    .about-content {
+        padding: 70px 10%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 150px;
+        align-items: center;
+    }
+    .about-content img {
+        width: 100%;
+        max-width: 400px;
+        animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+    .about-text h2 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        color: #0078ff;
+    }
+    .about-text p {
+        line-height: 1.6;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    /* Interactive Features */
+    .features {
+        padding: 60px 10%;
+        text-align: center;
+        background: #f0f6ff;
+    }
+    .features h2 { margin-bottom: 40px; }
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+    }
+    .feature {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: 0.3s;
+    }
+    .feature:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 20px rgba(0,120,255,0.2);
+    }
+    .feature i {
+        font-size: 2rem;
+        color: #0078ff;
+        margin-bottom: 15px;
+    }
+
+    /* Timeline */
+    .timeline {
+        padding: 70px 10%;
+    }
+    .timeline h2 { text-align: center; margin-bottom: 40px; }
+    .step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    .step:nth-child(even) { flex-direction: row-reverse; }
+    .step .icon {
+        background: #0078ff;
+        color: white;
+        padding: 15px;
+        border-radius: 50%;
+        margin: 0 20px;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+    .step p {
+        flex: 1;
+        background: #f8faff;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* Footer (same as new.html) */
+    footer {
+        background: linear-gradient(180deg, #002a4d, #001a30);
+        padding: 40px 20px;
+        text-align: center;
+        color: #cfd8dc;
+        position: relative;
+        overflow: hidden;
+    }
+    footer::before, footer::after {
+        content: "";
+        position: absolute;
+        width: 200px; height: 200px;
+        border-radius: 50%;
+        animation: pulseGlow 6s infinite alternate;
+    }
+    footer::before {
+        top: -50px; left: -50px;
+        background: rgba(0,120,255,0.1);
+    }
+    footer::after {
+        bottom: -50px; right: -50px;
+        background: rgba(0,200,255,0.08);
+    }
+    @keyframes pulseGlow {
+        from { transform: scale(0.9); opacity: 0.6; }
+        to { transform: scale(1.2); opacity: 1; }
+    }
+    .interactive-boxes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        position: relative;
+        z-index: 2;
+    }
+    .interactive-boxes .box {
+        background-color: white;
+        color: #004aad;
+        padding: 15px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease, box-shadow 0.3s ease;
+    }
+    .interactive-boxes .box:hover {
+        background-color: #0078ff;
+        color: white;
+        box-shadow: 0 0 15px #00e5ff;
+        transform: translateY(-4px);
+    }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header id="navbar">
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/784/784197.png" alt="Website Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="new.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="https://forms.gle/sNuH5YY4DBaRjREE6">Feedback</a></li>
+<li id="profileNavItem" style="display:none;">
+  <a href="profile.html"><i class="fas fa-user-circle" style="font-size:20px;"></i></a>
+</li>
+
+
+        </ul>
+    </nav>
+</header>
+
+<div class="spacer"></div>
+
+<!-- Hero -->
+<section class="about-hero">
+   <div>
+        <h1>About Our AI Health Model</h1>
+        <p>Empowering people with early prediction of Diabetes, Hypertension & Heart disease</p>
+    </div>
+</section>
+
+<!-- About Content -->
+<section class="about-content">
+    <div class="about-text">
+        <h2>Our Mission</h2>
+        <p>Diabetes and hypertension are two of the most common lifestyle-related conditions worldwide. When left unmanaged, they can lead to serious complications such as heart disease, kidney failure, and stroke.</p>
+        <p>Our AI-powered model is designed to predict the likelihood of developing these conditions using patient data, risk factors, and evidence-based insights. By supporting early detection, we aim to empower individuals and healthcare professionals to take preventive action before complications arise.</p>
+    </div>
+    <div>
+        <img src="https://cdn-icons-png.flaticon.com/512/4149/4149678.png" alt="AI Healthcare Cross">
+
+
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features">
+    <h2>Key Features of Our Model</h2>
+    <div class="feature-grid">
+        <div class="feature">
+            <i class="fas fa-database"></i>
+            <h3>Risk Assessment</h3>
+            <p>Analyzes patient history and lifestyle factors to estimate risk levels.</p>
+            <p>Patients: <span id="patients">0%</span></p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-robot"></i>
+            <h3>AI-Powered</h3>
+            <p>Uses catboost algorithm trained on medical datasets for accurate predictions.</p>
+            <p>Hospitals: <span id="hospitals">0%</span></p>
+        </div>
+        <div class="feature"><i class="fas fa-user-md"></i><h3>Doctor Friendly</h3><p>Acts as a decision-support tool, helping clinicians in preventive care.</p></div>
+        <div class="feature"><i class="fas fa-lightbulb"></i><h3>Preventive Insights</h3><p>Provides actionable tips on lifestyle and diet to reduce risks.</p></div>
+    </div>
+</section>
+
+
+
+<!-- Timeline -->
+<section class="timeline">
+    <h2>How It Works</h2>
+    <div class="step"><div class="icon"><i class="fas fa-user"></i></div><p>Step 1: Patient shares basic health information and lifestyle details.</p></div>
+    <div class="step"><div class="icon"><i class="fas fa-brain"></i></div><p>Step 2: The AI model analyzes the data and identifies risk factors.</p></div>
+    <div class="step"><div class="icon"><i class="fas fa-chart-line"></i></div><p>Step 3: The system provides a personalized risk score and insights.</p></div>
+    <div class="step"><div class="icon"><i class="fas fa-heart"></i></div><p>Step 4: Doctors and patients use the results to take preventive action.</p></div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="interactive-boxes">
+        <a href="download.html" class="box">Download Mobile App</a>
+        <a href="health_tips.html" class="box">Health Tips</a>
+        <a href="resource_art.html" class="box">Resources & Articles</a>
+
+    </div>
+</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+  // ✅ Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+    authDomain: "cognizant-a271c.firebaseapp.com",
+    projectId: "cognizant-a271c",
+    storageBucket: "cognizant-a271c.firebasestorage.app",
+    messagingSenderId: "492673749628",
+    appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+    measurementId: "G-SQD06X6T7V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // 🔐 Guard: Allow only signed-in users
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "signin.html";
+    } else {
+      console.log("✅ User logged in:", user.email);
+
+      const profileItem = document.getElementById("profileNavItem");
+      profileItem.style.display = "block";
+
+      let li = document.createElement("li");
+      li.innerHTML = `<a href="#" id="signOutBtn">Sign Out</a>`;
+      profileItem.parentNode.insertBefore(li, profileItem);
+
+      let userName = null;
+      let isDoctor = false;
+
+      // 🩺 Check Patients collection
+      const patientQuery = query(collection(db, "patients"), where("userId", "==", user.uid));
+      const patientSnap = await getDocs(patientQuery);
+
+      if (!patientSnap.empty) {
+        const patientData = patientSnap.docs[0].data();
+        userName = patientData.name || "Patient";
+      } else {
+        // 👨‍⚕️ If not a patient, check Doctors collection
+        const doctorQuery = query(collection(db, "doctors"), where("userId", "==", user.uid));
+        const doctorSnap = await getDocs(doctorQuery);
+
+        if (!doctorSnap.empty) {
+          const doctorData = doctorSnap.docs[0].data();
+          userName = doctorData.name || "Doctor";
+          isDoctor = true;
+        }
+      }
+
+      if (!userName) {
+        userName = "User";
+        console.warn("⚠️ No profile found in patients or doctors.");
+      }
+
+      // ✅ Show name in navbar
+      const profileName = document.createElement("span");
+      profileName.innerText = `Hi, ${userName}`;
+      profileName.style.marginLeft = "10px";
+      profileItem.appendChild(profileName);
+
+      // ✅ Change Home link dynamically
+      const homeLink = document.querySelector('nav ul li a[href="new.html"]');
+      if (homeLink) {
+        homeLink.setAttribute("href", isDoctor ? "doctor-main.html" : "new.html");
+      }
+
+      // Sign Out handler
+      document.getElementById("signOutBtn").addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          alert("Signed out successfully!");
+          window.location.href = "signin.html";
+        } catch (error) {
+          alert("Sign out failed: " + error.message);
+        }
+      });
+    }
+  });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sepsis Resources</title>
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #e3f2fd, #f8faff); color: #002a4d; position: relative; overflow-x: hidden; }
+
+    /* Decorative Background Waves */
+    body::before, body::after {
+        content: "";
+        position: fixed;
+        border-radius: 50%;
+        z-index: -1;
+        opacity: 0.15;
+        animation: floatWave 10s infinite alternate ease-in-out;
+    }
+    body::before {
+        width: 700px; height: 700px;
+        top: -200px; left: -200px;
+        background: radial-gradient(circle, #0078ff, transparent 70%);
+    }
+    body::after {
+        width: 600px; height: 600px;
+        bottom: -200px; right: -200px;
+        background: radial-gradient(circle, #00c6ff, transparent 70%);
+        animation-delay: 3s;
+    }
+    @keyframes floatWave {
+        from { transform: translateY(0) scale(1); }
+        to { transform: translateY(-40px) scale(1.1); }
+    }
+
+    /* Floating Background Particles */
+    .particle {
+        position: fixed;
+        border-radius: 50%;
+        background: rgba(0,120,255,0.25);
+        animation: moveParticle 15s linear infinite;
+        z-index: -1;
+    }
+    .particle:nth-child(1) { width: 10px; height: 10px; top: 20%; left: 15%; animation-delay: 0s; }
+    .particle:nth-child(2) { width: 8px; height: 8px; top: 50%; left: 70%; animation-delay: 5s; }
+    .particle:nth-child(3) { width: 12px; height: 12px; top: 75%; left: 30%; animation-delay: 10s; }
+    @keyframes moveParticle {
+        0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Navbar */
+    header {
+        background: linear-gradient(90deg, #ffffff, #f0f6ff);
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0px 3px 15px rgba(0,0,0,0.08);
+        transition: 0.3s ease;
+    }
+    header.scrolled { background: #ffffff; }
+    header .logo img { height: 45px; transition: transform 0.3s ease; }
+    header .logo img:hover { transform: rotate(-8deg) scale(1.1); }
+    nav ul { list-style: none; display: flex; gap: 25px; }
+    nav ul li a {
+        color: #002a4d; font-weight: bold; text-decoration: none; font-size: 15px;
+        position: relative; transition: color 0.3s ease, transform 0.2s ease;
+    }
+    nav ul li a::after {
+        content: ""; position: absolute; left: 0; bottom: -5px;
+        width: 0%; height: 2px; background: #0078ff;
+        transition: width 0.3s ease;
+    }
+    nav ul li a:hover::after { width: 100%; }
+    nav ul li a:hover { color: #0078ff; transform: scale(1.05); }
+
+    .spacer { height: 80px; }
+
+    /* Resources Section */
+    .resources { padding: 60px 8%; text-align: center; }
+    .resources h1 { font-size: 2.5rem; margin-bottom: 15px; color: #002a4d; }
+    .resources p { font-size: 1.1rem; margin-bottom: 40px; color: #444; }
+
+    /* Resource Cards */
+    .resource-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    .card {
+        background: rgba(255,255,255,0.9);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0px 5px 15px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: left;
+        position: relative;
+        backdrop-filter: blur(6px);
+    }
+    .card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+    }
+    .card i { font-size: 2rem; color: #0078ff; margin-bottom: 15px; }
+    .card h3 { margin-bottom: 10px; color: #002a4d; }
+    .card p { font-size: 0.95rem; margin-bottom: 15px; color: #555; }
+    .card a { color: #0078ff; font-weight: bold; text-decoration: none; transition: 0.3s; }
+    .card a:hover { color: #005fcc; }
+
+    /* Footer */
+    footer {
+        background: linear-gradient(180deg, #002a4d, #001a30);
+        padding: 40px 20px;
+        text-align: center;
+        color: #cfd8dc;
+        margin-top: 60px;
+    }
+    .interactive-boxes {
+        display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;
+    }
+    .interactive-boxes .box {
+        background-color: white; color: #004aad; padding: 15px 25px;
+        border-radius: 8px; text-decoration: none; font-weight: bold;
+        transition: all 0.3s ease, box-shadow 0.3s ease;
+    }
+    .interactive-boxes .box:hover {
+        background-color: #0078ff; color: white;
+        box-shadow: 0 0 15px #00e5ff;
+        transform: translateY(-4px);
+    }
+</style>
+</head>
+<body>
+
+<!-- Background Particles -->
+<div class="particle"></div>
+<div class="particle"></div>
+<div class="particle"></div>
+
+<!-- Header -->
+<header id="navbar">
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/784/784197.png" alt="Website Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="new.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="https://forms.gle/sNuH5YY4DBaRjREE6">Feedback</a></li>
+<li id="profileNavItem" style="display:none;">
+  <a href="profile.html"><i class="fas fa-user-circle" style="font-size:20px;"></i></a>
+</li>
+
+
+        </ul>
+    </nav>
+</header>
+
+<div class="spacer"></div>
+
+<!-- Resources Section -->
+<section class="resources">
+    <h1>Diabetes & Hypertension Resources</h1>
+    <p>Trusted sources to understand, prevent, and manage diabetes and hypertension, along with insights into AI-powered healthcare innovations.</p>
+
+    <div class="resource-grid">
+        <div class="card">
+            <i class="fas fa-heartbeat"></i>
+            <h3>World Health Organization</h3>
+            <p>WHO guidelines on preventing and managing diabetes, hypertension, and related cardiovascular diseases.</p>
+            <a href="https://www.who.int/health-topics/diabetes" target="_blank">Visit WHO</a>
+        </div>
+        <div class="card">
+            <i class="fas fa-book-medical"></i>
+            <h3>American Diabetes Association</h3>
+            <p>Evidence-based recommendations for diabetes care, prevention, and healthy living resources.</p>
+            <a href="https://diabetes.org" target="_blank">Visit ADA</a>
+        </div>
+        <div class="card">
+            <i class="fas fa-user-md"></i>
+            <h3>CDC – High Blood Pressure</h3>
+            <p>U.S. Centers for Disease Control resources for hypertension awareness and management.</p>
+            <a href="https://www.cdc.gov/bloodpressure/" target="_blank">Visit CDC</a>
+        </div>
+        <div class="card">
+            <i class="fas fa-robot"></i>
+            <h3>AI in Healthcare</h3>
+            <p>How artificial intelligence is transforming disease prediction and early risk detection for better patient outcomes.</p>
+            <a href="https://clinicalhypertension.biomedcentral.com/articles/10.1186/s40885-024-00266-9" target="_blank">Read the Article</a>
+         </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="interactive-boxes">
+        <a href="download.html" class="box">Download Mobile App</a>
+        <a href="health_tips.html" class="box">Health Tips</a>
+        <a href="resource_art.html" class="box">Resources & Articles</a>
+    </div>
+</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+  // ✅ Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+    authDomain: "cognizant-a271c.firebaseapp.com",
+    projectId: "cognizant-a271c",
+    storageBucket: "cognizant-a271c.firebasestorage.app",
+    messagingSenderId: "492673749628",
+    appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+    measurementId: "G-SQD06X6T7V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // 🔐 Guard: Allow only signed-in users
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "signin.html";
+    } else {
+      console.log("✅ User logged in:", user.email);
+
+      const profileItem = document.getElementById("profileNavItem");
+      profileItem.style.display = "block";
+
+      let li = document.createElement("li");
+      li.innerHTML = `<a href="#" id="signOutBtn">Sign Out</a>`;
+      profileItem.parentNode.insertBefore(li, profileItem);
+
+      let userName = null;
+      let isDoctor = false;
+
+      // 🩺 Check Patients collection
+      const patientQuery = query(collection(db, "patients"), where("userId", "==", user.uid));
+      const patientSnap = await getDocs(patientQuery);
+
+      if (!patientSnap.empty) {
+        const patientData = patientSnap.docs[0].data();
+        userName = patientData.name || "Patient";
+      } else {
+        // 👨‍⚕️ If not a patient, check Doctors collection
+        const doctorQuery = query(collection(db, "doctors"), where("userId", "==", user.uid));
+        const doctorSnap = await getDocs(doctorQuery);
+
+        if (!doctorSnap.empty) {
+          const doctorData = doctorSnap.docs[0].data();
+          userName = doctorData.name || "Doctor";
+          isDoctor = true;
+        }
+      }
+
+      if (!userName) {
+        userName = "User";
+        console.warn("⚠️ No profile found in patients or doctors.");
+      }
+
+      // ✅ Show name in navbar
+      const profileName = document.createElement("span");
+      profileName.innerText = `Hi, ${userName}`;
+      profileName.style.marginLeft = "10px";
+      profileItem.appendChild(profileName);
+
+      // ✅ Change Home link dynamically
+      const homeLink = document.querySelector('nav ul li a[href="new.html"]');
+      if (homeLink) {
+        homeLink.setAttribute("href", isDoctor ? "doctor-main.html" : "new.html");
+      }
+
+      // Sign Out handler
+      document.getElementById("signOutBtn").addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          alert("Signed out successfully!");
+          window.location.href = "signin.html";
+        } catch (error) {
+          alert("Sign out failed: " + error.message);
+        }
+      });
+    }
+  });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nearby Hospitals & Clinics</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    #map {
+      height: 90vh;
+      width: 100%;
+    }
+    .search-bar {
+      padding: 10px;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    input {
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #0078ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fcc;
+    }
+    .leaflet-popup-content {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 🔍 Search bar -->
+  <div class="search-bar">
+    <input type="text" id="locationInput" placeholder="Enter a city or location...">
+    <button onclick="searchLocation()">Search</button>
+  </div>
+
+  <!-- 🗺️ Map -->
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    let map;
+    let userMarker;
+    let hospitalLayer;
+
+    async function initMap(lat, lon) {
+      if (!map) {
+        map = L.map("map").setView([lat, lon], 14);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+        }).addTo(map);
+      } else {
+        map.setView([lat, lon], 14);
+      }
+
+      if (userMarker) {
+        map.removeLayer(userMarker);
+      }
+
+      userMarker = L.marker([lat, lon]).addTo(map)
+        .bindPopup("<b>📍 Selected Location</b>")
+        .openPopup();
+
+      loadHospitals(lat, lon);
+    }
+
+    async function loadHospitals(lat, lon) {
+      if (hospitalLayer) {
+        hospitalLayer.clearLayers();
+      } else {
+        hospitalLayer = L.layerGroup().addTo(map);
+      }
+
+      const overpassUrl = `
+        https://overpass-api.de/api/interpreter?data=[out:json];
+        (
+          node["amenity"="hospital"](around:3000,${lat},${lon});
+          node["amenity"="clinic"](around:3000,${lat},${lon});
+        );
+        out;
+      `;
+
+      try {
+        const res = await fetch(overpassUrl);
+        const places = await res.json();
+
+        if (places.elements.length === 0) {
+          alert("⚠️ No hospitals or clinics found nearby.");
+        }
+
+        places.elements.forEach(place => {
+          if (place.lat && place.lon) {
+            L.marker([place.lat, place.lon], { 
+              icon: L.icon({
+                iconUrl: "https://cdn-icons-png.flaticon.com/512/2966/2966486.png",
+                iconSize: [30, 30]
+              })
+            })
+            .addTo(hospitalLayer)
+            .bindPopup(`<b>${place.tags.name || "Unnamed Hospital/Clinic"}</b><br>
+                        🏥 Type: ${place.tags.amenity}<br>
+                        📍 Lat: ${place.lat.toFixed(4)}, Lon: ${place.lon.toFixed(4)}`);
+          }
+        });
+      } catch (err) {
+        console.error("Error fetching hospitals:", err);
+      }
+    }
+
+    async function searchLocation() {
+      const query = document.getElementById("locationInput").value.trim();
+      if (!query) {
+        alert("⚠️ Please enter a location to search.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+        const results = await res.json();
+
+        if (results.length === 0) {
+          alert("❌ Location not found. Try another search.");
+          return;
+        }
+
+        const lat = parseFloat(results[0].lat);
+        const lon = parseFloat(results[0].lon);
+
+        initMap(lat, lon);
+      } catch (err) {
+        console.error("Error searching location:", err);
+      }
+    }
+
+    // 📌 Load with user IP-based location first
+    (async function() {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        initMap(data.latitude, data.longitude);
+      } catch (err) {
+        console.error("Error fetching IP location:", err);
+        // fallback: center on Delhi
+        initMap(28.6139, 77.2090);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diabetes & Hypertension Information</title>
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', sans-serif; background-color: #f8faff; color: #002a4d; }
+
+    /* Navbar */
+    header {
+        background: linear-gradient(90deg, #ffffff, #f0f6ff);
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0px 3px 15px rgba(0,0,0,0.08);
+    }
+    header .logo img { height: 45px; transition: transform 0.3s ease; }
+    header .logo img:hover { transform: rotate(-8deg) scale(1.1); }
+    nav ul { list-style: none; display: flex; gap: 25px; }
+    nav ul li a, nav ul li button {
+        color: #002a4d;
+        text-decoration: none;
+        font-weight: bold;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        transition: color 0.3s ease, transform 0.2s ease;
+        position: relative;
+    }
+    nav ul li a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+        width: 0%;
+        height: 2px;
+        background: #0078ff;
+        transition: width 0.3s ease;
+    }
+    nav ul li a:hover::after { width: 100%; }
+    nav ul li a:hover { color: #0078ff; transform: scale(1.05); }
+
+    .spacer { height: 90px; }
+
+    /* Info Sections */
+    section.info {
+        padding: 70px 10%;
+        background: #fff;
+    }
+    section.info:nth-child(even) { background: #f0f6ff; }
+    .info-block {
+        display: flex;
+        align-items: center;
+        gap: 60px;
+        margin-bottom: 50px;
+    }
+    .info-text { flex: 1; }
+    .info-text h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: #0078ff;
+    }
+    .info-text p, .info-text ul {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #333;
+    }
+    .info-text ul { margin-left: 20px; list-style: disc; }
+    .info-image img {
+        width: 250px;
+        max-width: 100%;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+    .info-image img:hover { transform: scale(1.05); }
+
+    /* Footer */
+    footer {
+        background: linear-gradient(180deg, #002a4d, #001a30);
+        padding: 40px 20px;
+        text-align: center;
+        color: #cfd8dc;
+        position: relative;
+        overflow: hidden;
+    }
+    .interactive-boxes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        position: relative;
+        z-index: 2;
+    }
+    .interactive-boxes .box {
+        background-color: white;
+        color: #004aad;
+        padding: 15px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease, box-shadow 0.3s ease;
+    }
+    .interactive-boxes .box:hover {
+        background-color: #0078ff;
+        color: white;
+        box-shadow: 0 0 15px #00e5ff;
+        transform: translateY(-4px);
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<!-- Header -->
+<header id="navbar">
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/784/784197.png" alt="Website Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="new.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="https://forms.gle/sNuH5YY4DBaRjREE6">Feedback</a></li>
+<li id="profileNavItem" style="display:none;">
+  <a href="profile.html"><i class="fas fa-user-circle" style="font-size:20px;"></i></a>
+</li>
+
+
+        </ul>
+    </nav>
+</header>
+
+<div class="spacer"></div>
+
+<!-- Diabetes Info -->
+<section class="info">
+    <div class="info-block">
+        <div class="info-text">
+            <h2>What is Diabetes?</h2>
+            <p>Diabetes is a chronic condition that occurs when your body cannot properly regulate blood sugar (glucose). It can be classified as Type 1, Type 2, or gestational diabetes.</p>
+            <ul>
+                <li><b>Causes:</b> Insulin resistance, genetics, poor lifestyle habits.</li>
+                <li><b>Symptoms:</b> Excessive thirst, frequent urination, fatigue, blurred vision.</li>
+                <li><b>Complications:</b> Heart disease, kidney failure, nerve damage.</li>
+            </ul>
+        </div>
+        <div class="info-image">
+            <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" alt="Diabetes Info">
+        </div>
+    </div>
+</section>
+
+<!-- Hypertension Info -->
+<section class="info">
+    <div class="info-block">
+        <div class="info-image">
+            <img src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png" alt="Hypertension Info">
+        </div>
+        <div class="info-text">
+            <h2>What is Hypertension?</h2>
+            <p>Hypertension (high blood pressure) occurs when the force of blood against artery walls is consistently too high, increasing the risk of heart disease and stroke.</p>
+            <ul>
+                <li><b>Causes:</b> Stress, obesity, excess salt intake, genetics.</li>
+                <li><b>Symptoms:</b> Often called the “silent killer” as symptoms may not show until severe.</li>
+                <li><b>Complications:</b> Stroke, heart attack, kidney damage.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="info">
+    <div class="info-block">
+        <div class="info-text">
+            <h2>What is Heart Disease?</h2>
+            <p>Heart disease refers to a range of conditions that affect the heart’s structure and function. The most common type is coronary artery disease, which can lead to heart attacks.</p>
+            <ul>
+                <li><b>Causes:</b> High blood pressure, high cholesterol, smoking, diabetes, obesity.</li>
+                <li><b>Symptoms:</b> Chest pain, shortness of breath, dizziness, irregular heartbeat.</li>
+                <li><b>Complications:</b> Heart attack, heart failure, stroke, sudden cardiac arrest.</li>
+            </ul>
+        </div>
+        <div class="info-image">
+            <img src="https://cdn-icons-png.flaticon.com/512/2966/2966489.png" alt="Heart Disease Info">
+        </div>
+    </div>
+</section>
+
+<!-- Prevention Tips -->
+<section class="info">
+    <div class="info-block">
+        <div class="info-text">
+            <h2>Prevention & Healthy Lifestyle</h2>
+            <p>Managing the chronic diseases starts with healthy daily habits. Small changes can greatly reduce risks.</p>
+            <ul>
+                <li>Eat a balanced diet (low sugar, low salt, high fiber).</li>
+                <li>Exercise at least 30 minutes a day.</li>
+                <li>Maintain a healthy weight.</li>
+                <li>Limit alcohol & quit smoking.</li>
+                <li>Regular health checkups.</li>
+            </ul>
+            <br>
+              </div>
+        <div class="info-image">
+            <img src="https://cdn-icons-png.flaticon.com/512/387/387561.png" alt="Healthy Living">
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="interactive-boxes">
+        <a href="download.html" class="box">Download Mobile App</a>
+        <a href="health_tips.html" class="box">Health Tips</a>
+        <a href="resource_art.html" class="box">Resources & Articles</a>
+    </div>
+</footer>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+  // ✅ Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC-YNjBpgC9MPaJSvzWjCFfn-MSvTg2Z8",
+    authDomain: "cognizant-a271c.firebaseapp.com",
+    projectId: "cognizant-a271c",
+    storageBucket: "cognizant-a271c.firebasestorage.app",
+    messagingSenderId: "492673749628",
+    appId: "1:492673749628:web:7d5d9167d186c514646ff9",
+    measurementId: "G-SQD06X6T7V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // 🔐 Guard: Allow only signed-in users
+  // 🔐 Guard: Allow only signed-in users
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = "signin.html";
+    } else {
+        console.log("✅ User logged in:", user.email);
+
+        const profileItem = document.getElementById("profileNavItem");
+        if (profileItem) {
+            profileItem.style.display = "block";
+
+            // Create Sign Out button styled like navbar links
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="#" id="signOutBtn">Sign Out</a>`;
+            profileItem.parentNode.insertBefore(li, profileItem);
+
+            // Fetch patient profile from Firestore
+            const q = query(collection(db, "patients"), where("userId", "==", user.uid));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const data = querySnapshot.docs[0].data();
+                console.log("📄 Patient Profile:", data);
+
+                const profileName = document.createElement("span");
+                profileName.innerText = `Hi, ${data.name || "User"}`;
+                profileName.style.marginLeft = "10px";
+                profileItem.appendChild(profileName);
+            } else {
+                console.log("⚠️ No profile found for this user.");
+            }
+
+            // Sign Out click handler
+            const signOutBtn = document.getElementById("signOutBtn");
+            if (signOutBtn) {
+                signOutBtn.addEventListener("click", async (e) => {
+                    e.preventDefault(); // prevent page jump
+                    try {
+                        await signOut(auth);
+                        alert("Signed out successfully!");
+                        window.location.href = "signin.html";
+                    } catch (error) {
+                        alert("Sign out failed: " + error.message);
+                    }
+                });
+            }
+        }
+    }
+});
+
+
+  /* Animated Counters */
+  function animateCounter(id, end, suffix="") {
+    let el = document.getElementById(id);
+    if (!el) return; // skip if element not found
+
+    let start = 0;
+    let step = end / 100;
+    let interval = setInterval(() => {
+        start += step;
+        if (start >= end) { 
+            el.innerText = end + suffix;
+            clearInterval(interval);
+        } else {
+            el.innerText = Math.floor(start) + suffix;
+        }
+    }, 30);
+}
+
+
+window.addEventListener("load", () => {
+    animateCounter("patients", 25, "%");
+    animateCounter("hospitals", 30, "%");
+});
+
+  /* Navbar Scroll Effect */
+  window.addEventListener("scroll", () => {
+    let nav = document.getElementById("navbar");
+    if (window.scrollY > 50) nav.classList.add("scrolled");
+    else nav.classList.remove("scrolled");
+  });
+</script>
+
+</body>
+</html>
