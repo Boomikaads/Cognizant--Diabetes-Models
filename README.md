@@ -1,4 +1,4 @@
-1. Introduction
+#1. Introduction
 
 Problem statement (chronic disease burden, cost, preventable complications)
 
@@ -134,6 +134,8 @@ Impact (reduce complications, lower ER visits, support doctors)
 Limitations (dataset size, real-world integration challenges, cost of wearables)
 
 Future directions:
+
+
 
 Integration with real wearable APIs (Fitbit, Apple Health)
 
